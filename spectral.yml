@@ -1,0 +1,8 @@
+extends: spectral:oas
+rules:
+  operation-operationId-unique:
+    description: "Every operation must have a unique `operationId`."
+    severity: error
+    given: "$.paths[*][*].operationId"
+    then:
+      function: truthy

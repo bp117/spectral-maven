@@ -1,0 +1,139 @@
+openapi: 3.0.1
+info:
+  title: Sample API
+  description: A sample API to illustrate contract-first approach.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+    description: Local server
+
+paths:
+  /items:
+    get:
+      summary: List all items
+      operationId: listItems
+      tags:
+        - Items
+      responses:
+        '200':
+          description: A list of items.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+    post:
+      summary: Create a new item
+      operationId: listItems
+      tags:
+        - Items
+      requestBody:
+        description: The item to create.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewItem'
+      responses:
+        '201':
+          description: The created item.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+
+  /items/{itemId}:
+    get:
+      summary: Get an item by ID
+      operationId: getItem
+      tags:
+        - Items
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: The ID of the item to retrieve.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The item with the specified ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: Item not found.
+
+    put:
+      summary: Update an item by ID
+      operationId: updateItem
+      tags:
+        - Items
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: The ID of the item to update.
+          schema:
+            type: string
+      requestBody:
+        description: The updated item.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewItem'
+      responses:
+        '200':
+          description: The updated item.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: Item not found.
+
+    delete:
+      summary: Delete an item by ID
+      operationId: deleteItem
+      tags:
+        - Items
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: The ID of the item to delete.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: The item was successfully deleted.
+        '404':
+          description: Item not found.
+
+components:
+  schemas:
+    Item:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+      required:
+        - id
+        - name
+
+    NewItem:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      required:
+        - name
